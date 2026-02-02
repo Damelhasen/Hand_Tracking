@@ -45,9 +45,10 @@ with mp_hands.Hands(
                     h, w, _ = frame_bgr.shape
                     idx_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP] 
                     thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-                    rndthumb = round((thumb_tip.y *10),2)
-                    rndindex = round((idx_tip.y *10),2)
-                    print(rndindex, rndthumb)
+                    rndthumb = round((thumb_tip.y *10),)
+                    rndindex = round((idx_tip.y *10),)
+                    if rndthumb == rndindex :
+                        print("Click")
                         
                     #position = (int(idx_tip.x * w), int(idx_tip.y * h))
                     #print(position)
