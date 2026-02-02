@@ -5,6 +5,7 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
+position1 = mp.solutions.hands.HandLandmark.INDEX_FINGER_TIP 
 webcam = cv2.VideoCapture(0)
 print("Webcam Found")
 
@@ -16,6 +17,8 @@ with mp_hands.Hands(
     min_tracking_confidence=0.5,
 ) as hands:
     while True:
+        
+
         ret, frame = webcam.read()
         if ret:
             # Convert frame to RGB for processing
@@ -37,6 +40,19 @@ with mp_hands.Hands(
                         mp_drawing_styles.get_default_hand_landmarks_style(),
                         mp_drawing_styles.get_default_hand_connections_style()
                     )
+                    
+                    # get index finger tip normalized coordinates and convert to pixel coords
+                    h, w, _ = frame_bgr.shape
+                    idx_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP] 
+                    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+                    rndthumb = round((thumb_tip.y *10),2)
+                    rndindex = round((idx_tip.y *10),2)
+                    print(rndindex, rndthumb)
+                        
+                    #position = (int(idx_tip.x * w), int(idx_tip.y * h))
+                    #print(position)
+                   
+                    
             
             cv2.imshow("Webcam", frame_bgr)
             
