@@ -1,5 +1,8 @@
 import cv2
 import mediapipe as mp
+import screen_brightness_control as sbc
+
+
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -18,6 +21,7 @@ with mp_hands.Hands(
 ) as hands:
     while True:
         
+        current_brightness = sbc.get_brightness()[0]
 
         ret, frame = webcam.read()
         if ret:
@@ -43,14 +47,25 @@ with mp_hands.Hands(
                     
                     # get index finger tip normalized coordinates and convert to pixel coords
                     h, w, _ = frame_bgr.shape
-                    idx_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP] 
-                    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-                    rndthumb = round((thumb_tip.y *10),)
-                    rndindex = round((idx_tip.y *10),)
-                    if rndthumb == rndindex :
-                        print("Click")
+                    rightindex = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP] 
+                    rigthpinky = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
+                    rightthumb = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+                    rightrndthumb = round((rightthumb.y *1),1)
+                    rightrndindex = round((rightindex.y *1),1)
+                    rightrndpinky = round((rigthpinky.y *1),1)
+                    i = 0
+                    if rightrndthumb == rightrndindex :
+                        new_bri = current_brightness + 20
+                        if current_brightness < 100 : 
+                            sbc.set_brightness(new_bri)
+                    if rightrndpinky == rightrndindex :
+                        new_bri = current_brightness - 20
+                        if current_brightness > 0 : 
+                            sbc.set_brightness(new_bri)   
                         
-                    #position = (int(idx_tip.x * w), int(idx_tip.y * h))
+                       
+                        
+                    #position = (int(rightindex.x * w), int(rightindex.y * h))
                     #print(position)
                    
                     
